@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+d<!DOCTYPE html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
@@ -65,6 +65,36 @@
 
   <script>
     "use strict";
+    const nameInput = document.querySelector('.add-form-name');
+    const commentInput = document.querySelector('.add-form-text');
+    const addButton = document.querySelector('.add-form-button');
+    const comments = document.querySelector('.comments');
+
+    addButton.addEventListener('click', () => {
+      if (!nameInput.value || !commentInput.value) {
+        return;
+      } 
+      const commentTemplate = `
+         <li class='comment'>
+          <div class='comment-header'>
+            <div>${nameInput.value}</div>
+            <div>${new Date().toLocaleString()}</div>
+          </div>
+          <div class='comment-body'>
+            <div class='comment-text'>${commentInput.value}</div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button"></button>
+            </div>
+          </div>
+        </li>
+      `;
+      comments.insertAdjacentHTML('beforeend', commentTemplate);
+      nameInput.value = '';
+      commentInput.value = ''; 
+    });      
     // Код писать здесь
     console.log("It works!");
   </script>
