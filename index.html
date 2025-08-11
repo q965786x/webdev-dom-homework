@@ -68,17 +68,27 @@ d<!DOCTYPE html>
     const nameInput = document.querySelector('.add-form-name');
     const commentInput = document.querySelector('.add-form-text');
     const addButton = document.querySelector('.add-form-button');
-    const comments = document.querySelector('.comments');
+    const commentsEl = document.querySelector('.comments');
 
     addButton.addEventListener('click', () => {
       if (!nameInput.value || !commentInput.value) {
-        return;
-      } 
+        alert('Необходимо заполнить все поля');
+      }
+      
+      const date = new Date();
+      const dateStr = date.toLocaleString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', '');
+
       const commentTemplate = `
          <li class='comment'>
           <div class='comment-header'>
             <div>${nameInput.value}</div>
-            <div>${new Date().toLocaleString()}</div>
+            <div>${dateStr}</div>
           </div>
           <div class='comment-body'>
             <div class='comment-text'>${commentInput.value}</div>
@@ -91,7 +101,13 @@ d<!DOCTYPE html>
           </div>
         </li>
       `;
-      comments.insertAdjacentHTML('beforeend', commentTemplate);
+
+      const divEl = document.createElement('div');
+      divEl.innerHTML = commentTemplate;
+      const newComment = divEl.firstElementChild;
+
+      commentsEl.appendChild(newComment);
+      
       nameInput.value = '';
       commentInput.value = ''; 
     });      
