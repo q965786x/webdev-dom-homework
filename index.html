@@ -73,6 +73,7 @@ d<!DOCTYPE html>
     addButton.addEventListener('click', () => {
       if (!nameInput.value || !commentInput.value) {
         alert('Необходимо заполнить все поля');
+        return;
       }
       
       const date = new Date();
