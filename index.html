@@ -70,49 +70,99 @@ d<!DOCTYPE html>
     const addButton = document.querySelector('.add-form-button');
     const commentsEl = document.querySelector('.comments');
 
-    addButton.addEventListener('click', () => {
-      if (!nameInput.value || !commentInput.value) {
-        alert('Необходимо заполнить все поля');
-        return;
-      }
-      
-      const date = new Date();
-      const dateStr = date.toLocaleString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }).replace(',', '');
+    const formatDate = () => {
+    const date = new Date();
+    return date.toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    }).replace(',', '');
+  };
 
-      const commentTemplate = `
-         <li class='comment'>
+  let comments = [
+    {
+      userName: "Глеб Фокин",
+      date: "12.02.22 12:18",
+      commentText: "Это будет первый комментарий на этой странице",
+      likes: 3,
+      isLiked: false
+    },
+    {
+      userName: "Варвара Н.",
+      date: "13.02.22 19:22",
+      commentText: "Мне нравится как оформлена эта страница! ❤",
+      likes: 75,
+      isLiked: true
+    }
+  ];
+
+  const renderComments = () => {
+    commentsEl.innerHTML = comments.map((comment, index) => {
+      return `
+        <li class='comment'>
           <div class='comment-header'>
-            <div>${nameInput.value}</div>
-            <div>${dateStr}</div>
+            <div>${comment.userName}</div>
+            <div>${comment.date}</div>
           </div>
           <div class='comment-body'>
-            <div class='comment-text'>${commentInput.value}</div>
+            <div class='comment-text'>${comment.commentText}</div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button"></button>
+              <span class="likes-counter">${comment.likes}</span>
+              <button class="like-button ${comment.isLiked ? '-active-like' : ''}" data-index="${index}"></button>
             </div>
           </div>
         </li>
       `;
+    }).join('');
+  };
 
-      const divEl = document.createElement('div');
-      divEl.innerHTML = commentTemplate;
-      const newComment = divEl.firstElementChild;
+  
+  renderComments();
 
-      commentsEl.appendChild(newComment);
+  
+  addButton.addEventListener('click', () => {
+    if (!nameInput.value || !commentInput.value) {
+      alert('Необходимо заполнить все поля');
+      return;
+    }
+    
+    const newComment = {
+      userName: nameInput.value,
+      date: formatDate(),
+      commentText: commentInput.value,
+      likes: 0,
+      isLiked: false
+    };
+
+    comments.push(newComment);
+    renderComments();
+    
+    nameInput.value = '';
+    commentInput.value = ''; 
+  });   
+  
+  
+  commentsEl.addEventListener('click', (event) => {
+    if (event.target.classList.contains('like-button')) {
+      const index = event.target.dataset.index;
+      const comment = comments[index];
       
-      nameInput.value = '';
-      commentInput.value = ''; 
-    });      
-    // Код писать здесь
-    console.log("It works!");
-  </script>
+      if (event.target.classList.contains('-active-like')) {
+        comment.likes--;
+        comment.isLiked = false;
+      } else {
+        comment.likes++;
+        comment.isLiked = true;
+      }
+      
+      renderComments();
+    }
+  });
+    
+  console.log("It works!");
+</script>
 </html>
