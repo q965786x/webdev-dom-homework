@@ -125,7 +125,7 @@ d<!DOCTYPE html>
 
   
   addButton.addEventListener('click', () => {
-    if (!nameInput.value || !commentInput.value) {
+    if (!nameInput.value.trim() || !commentInput.value.trim()) {
       alert('Необходимо заполнить все поля');
       return;
     }
