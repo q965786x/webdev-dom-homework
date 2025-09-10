@@ -63,7 +63,7 @@ d<!DOCTYPE html>
     </div>
   </body>
 
-  <script>
+<!-- <script>
     "use strict";
     const nameInput = document.querySelector('.add-form-name');
     const commentInput = document.querySelector('.add-form-text');
@@ -83,9 +83,9 @@ d<!DOCTYPE html>
 
     const sanitizeHtml = (text) => {
         return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')        
-    };
-
-    let comments = [
+    }    
+    
+    let comments = [      
       {
         userName: "Глеб Фокин",
         date: "12.02.22 12:18",
@@ -126,7 +126,8 @@ d<!DOCTYPE html>
     };
   
     renderComments();
-  
+
+    
     addButton.addEventListener('click', () => {
       const userName = sanitizeHtml(nameInput.value.trim());
       const commentText = sanitizeHtml(commentInput.value.trim());
@@ -183,5 +184,7 @@ d<!DOCTYPE html>
     });
 
   console.log("It works!");
-</script>
+</script>-->
+
+<script src="./index.js"></script>
 </html>
