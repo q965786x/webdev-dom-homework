@@ -6,10 +6,10 @@ d<!DOCTYPE html>
     <link rel="stylesheet" href="styles.css" />
   </head>
 
-  <body>
+<body>
     <div class="container">
       <ul class="comments">
-        <li class="comment">
+        <!--<li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
             <div>12.02.22 12:18</div>
@@ -42,35 +42,38 @@ d<!DOCTYPE html>
               <button class="like-button -active-like"></button>
             </div>
           </div>
-        </li>
+        </li>-->
       </ul>
       <div class="add-form">
         <input
           type="text"
           class="add-form-name"
           placeholder="Введите ваше имя"
+          id="name-input"
         />
         <textarea
           type="textarea"
           class="add-form-text"
           placeholder="Введите ваш коментарий"
           rows="4"
+          id="text-input"
         ></textarea>
         <div class="add-form-row">
           <button class="add-form-button">Написать</button>
         </div>
       </div>
     </div>
-  </body>
+</body>
 
-  <script>
-    "use strict";
-    const nameInput = document.querySelector('.add-form-name');
-    const commentInput = document.querySelector('.add-form-text');
-    const addButton = document.querySelector('.add-form-button');
-    const commentsEl = document.querySelector('.comments');
+<!--<script>
 
-    const formatDate = () => {
+  //Проект "Комментарии"
+  "use strict";
+
+  const name = document.getElementById('name-input');
+  const text = document.getElementById('text-input');
+
+  const formatDate = () => {
       const date = new Date();
       return date.toLocaleString('ru-RU', {
         day: '2-digit',
@@ -80,108 +83,114 @@ d<!DOCTYPE html>
         minute: '2-digit'
       }).replace(',', '');
     };
+    
 
-    const sanitizeHtml = (text) => {
-        return text.replaceAll('<', '&lt;').replaceAll('>', '&gt;')        
+  const sanitizeHtml = (value) => {
+    return value.replaceAll('<', '&lt;') .replaceAll('>', '&gt;');  
     };
+  
 
-    let comments = [
+  let comments = [      
       {
-        userName: "Глеб Фокин",
+        name: "Глеб Фокин",
         date: "12.02.22 12:18",
-        commentText: "Это будет первый комментарий на этой странице",
+        text: "Это будет первый комментарий на этой странице",
         likes: 3,
-        isLiked: false
+        isLiked: false,
       },
       {
-        userName: "Варвара Н.",
+        name: "Варвара Н.",
         date: "13.02.22 19:22",
-        commentText: "Мне нравится как оформлена эта страница! ❤",
+        text: "Мне нравится как оформлена эта страница! ❤",
         likes: 75,
-        isLiked: true
+        isLiked: true,
       }
     ];
 
-    const renderComments = () => {
-      commentsEl.innerHTML = comments.map((comment, index) => {
-        return `
-          <li class='comment' data-index="${index}">
-            <div class='comment-header'>
-              <div>${sanitizeHtml(comment.userName)}</div>
-              <div>${comment.date}</div>
-            </div>
-            <div class='comment-body'>
-              <div class='comment-text'>${sanitizeHtml(comment.commentText)}</div>
-            </div>
-            <div class="comment-footer">
-              <div class="likes">
-                <span class="likes-counter">${comment.likes}</span>
-                <button class="like-button ${comment.isLiked ? '-active-like' : ''}">
-                </button>
-              </div>
-            </div>
-          </li>
-        `;
-      }).join('');
-    };
-  
-    renderComments();
-  
-    addButton.addEventListener('click', () => {
-      const userName = sanitizeHtml(nameInput.value.trim());
-      const commentText = sanitizeHtml(commentInput.value.trim());
-        
-        if (!userName || !commentText) {
-            alert('Необходимо заполнить все поля');
-            return;
-        }
+  const renderComments = () => {
+    const list = document.querySelector('.comments');
     
-      const newComment = {
-        userName: userName,
-        date: formatDate(),
-        commentText: commentText,
-        likes: 0,
-        isLiked: false
-      };
+    list.innerHTML = comments
+    .map((comment, index) => {
+      return `
+        <li class='comment' data-index="${index}">
+          <div class='comment-header'>
+            <div>${comment.name}</div>
+            <div>${comment.date}</div>
+          </div>
+          <div class='comment-body'>
+            <div class='comment-text'>${comment.text}</div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">${comment.likes}</span>
+              <button data-index="${index}" class="like-button ${comment.isLiked ? '-active-like' : ''}"></button>
+            </div>
+          </div>
+        </li>
+      `;
+    }).join('');
 
-      comments.push(newComment);
-      renderComments();
-      
-      nameInput.value = '';
-      commentInput.value = ''; 
-    });    
-  
-    commentsEl.addEventListener('click', (event) => {
-      if (event.target.classList.contains('like-button')) {
-        event.stopPropagation();
-        const commentElement = event.target.closest('.comment')
-        const index = commentElement.dataset.index;
-        const comment = comments[index];
-        
-          if (event.target.classList.contains('-active-like')) {
-            comment.likes--;
-            comment.isLiked = false;
-          } else {
-            comment.likes++;
-            comment.isLiked = true;
-          }
-        
-        renderComments();
-        return;
+    const likeButtons = document.querySelectorAll('.like-button');
+
+      for (const likeButton of likeButtons) {
+        likeButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+
+          const index = likeButton.dataset.index;
+          const comment = comments[index];
+
+          comment.likes = comment.isLiked
+          ? comment.likes -1
+          : comment.likes +1;
+
+          comment.isLiked = !comment.isLiked;
+
+          renderComments();
+        });
       }
 
-        const commentElement = event.target.closest('.comment');
-          if (commentElement) {
-            const index = commentElement.dataset.index;
-            const comment = comments[index];
-            
-            nameInput.value = comment.userName;
-            commentInput.value = `> ${comment.commentText}\n\n`;
-            
-            commentInput.focus();
-          }
-    });
+    const commentsElements = document.querySelectorAll('.comment');
 
-  console.log("It works!");
-</script>
+      for (const commentElement of commentsElements) {
+        commentElement.addEventListener('click', () => {          
+          const currentComment = comments[commentElement.dataset.index];
+          text.value = `${currentComment.name}: ${currentComment.text}`;
+        });
+      }
+
+  };
+
+  renderComments();
+
+  const addButton = document.querySelector('.add-form-button');
+  
+
+  addButton.addEventListener('click', () => {
+    if (!name.value || !text.value) {
+      alert('Необходимо заполнить все поля');
+      return;
+    }
+
+    const newComment = {
+      name: sanitizeHtml(name.value),
+      date: formatDate(),
+      text: sanitizeHtml(text.value),
+      likes: 0,
+      isLiked: false,
+    };
+
+    comments.push(newComment);
+
+    renderComments();
+
+    name.value = "";
+    text.value = "";
+  }); 
+  
+console.log("It works!");
+    
+</script>-->
+
+<script type="module" src="./index.js"></script>
 </html>
