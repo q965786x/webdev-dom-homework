@@ -1,4 +1,5 @@
 import { comments } from "./comments.js"
+import { initAddCommentListener, initReplyListeners, initLikeButtonsListeners } from "./initListeners.js";
 
 export const renderComments = () => {
     const list = document.querySelector('.comments');
@@ -22,7 +23,13 @@ export const renderComments = () => {
           </div>
         </li>
       `;
-    }).join('');
+    }).join('')
+
+    initAddCommentListener(renderComments)
+    initReplyListeners()
+    initLikeButtonsListeners()
   }
+
+  
   
     

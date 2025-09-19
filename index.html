@@ -1,4 +1,4 @@
-d<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Проект "Комменты"</title>
@@ -43,7 +43,7 @@ d<!DOCTYPE html>
             </div>
           </div>
         </li>-->
-      </ul>
+      </ul>      
       <div class="add-form">
         <input
           type="text"
@@ -62,6 +62,8 @@ d<!DOCTYPE html>
           <button class="add-form-button">Написать</button>
         </div>
       </div>
+      <div class="form">ИДЁТ ЗАГРУЗКА...
+      </div>
     </div>
 </body>
 
@@ -72,7 +74,7 @@ d<!DOCTYPE html>
 
   const name = document.getElementById('name-input');
   const text = document.getElementById('text-input');
-
+  
   const formatDate = () => {
       const date = new Date();
       return date.toLocaleString('ru-RU', {
@@ -82,13 +84,11 @@ d<!DOCTYPE html>
         hour: '2-digit',
         minute: '2-digit'
       }).replace(',', '');
-    };
-    
+    };    
 
   const sanitizeHtml = (value) => {
     return value.replaceAll('<', '&lt;') .replaceAll('>', '&gt;');  
-    };
-  
+    };  
 
   let comments = [      
       {
@@ -163,8 +163,7 @@ d<!DOCTYPE html>
 
   renderComments();
 
-  const addButton = document.querySelector('.add-form-button');
-  
+  const addButton = document.querySelector('.add-form-button');  
 
   addButton.addEventListener('click', () => {
     if (!name.value || !text.value) {
