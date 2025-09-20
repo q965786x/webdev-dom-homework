@@ -5,7 +5,7 @@ import { sanitizeHtml } from "./addFunctions.js"
 import { delay } from "./api.js"
 
 
-export const initLikeButtonsListeners = (renderComments) => {
+export const initLikeButtonsListeners = () => {
     const likeButtons = document.querySelectorAll('.like-button');
 
     for (const likeButton of likeButtons) {
