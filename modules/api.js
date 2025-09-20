@@ -1,5 +1,6 @@
 import { formatDate } from "./addFunctions.js"
 
+
 const host = 'https://wedev-api.sky.pro/api/v1/lialia-khabibova'
 
 export const fetchComments = () => {
@@ -32,4 +33,12 @@ export const postComment = (text, name) => {
     }).then(() => {
         return fetchComments()
     })
+}
+
+export function delay(interval = 300) {
+   return new Promise((resolve) => {
+      setTimeout(() => {
+      resolve();
+      }, interval);
+   });
 }

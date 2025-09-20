@@ -1,29 +1,48 @@
 import { postComment } from "./api.js"
 import { updateComments } from "./comments.js"
 import { comments } from "./comments.js"
-import { sanitizeHtml } from "./addFunctions.js";
+import { sanitizeHtml } from "./addFunctions.js"
+import { delay } from "./api.js"
 
 
 export const initLikeButtonsListeners = () => {
     const likeButtons = document.querySelectorAll('.like-button');
 
-      for (const likeButton of likeButtons) {
-        likeButton.addEventListener('click', (event) => {
-          event.stopPropagation();
+    for (const likeButton of likeButtons) {
+      likeButton.addEventListener('click', (event) => {
+        event.stopPropagation();
 
-          const index = likeButton.dataset.index;
-          const comment = comments[index];
+        const index = likeButton.dataset.index;
+        const comment = comments[index];
 
-          comment.likes = comment.isLiked
-          ? comment.likes -1
-          : comment.likes +1;
+        // Добавляем класс анимации к кнопке лайка
+            likeButton.classList.add('-loading-like');
+            likeButton.disabled = true; // Отключаем кнопку во время анимации
 
-          comment.isLiked = !comment.isLiked;
+            // Используем delay вместо мгновенного обновления
+            delay(2000).then(() => {
+                comment.likes = comment.isLiked
+                    ? comment.likes - 1
+                    : comment.likes + 1;
 
-          renderComments();
-        });
-      }
+                comment.isLiked = !comment.isLiked;
+                
+                // Убираем класс анимации и включаем кнопку
+                likeButton.classList.remove('-loading-like');
+                likeButton.disabled = false;
+                
+                delay();
+            });
 
+        //comment.likes = comment.isLiked
+        //  ? comment.likes -1
+        //  : comment.likes +1;
+
+        //  comment.isLiked = !comment.isLiked;
+
+        //  renderComments();
+      })
+    }
 }
 
 export const initReplyListeners = () => {
@@ -41,7 +60,7 @@ export const initReplyListeners = () => {
 export const initAddCommentListener = (renderComments) => {
     const name = document.getElementById('name-input');
     const text = document.getElementById('text-input');
-    const addButton = document.querySelector('.add-form-button');
+    const addButton = document.querySelector('.add-form-button');     
 
     addButton.addEventListener('click', () => {
         if (!name.value || !text.value) {
@@ -49,13 +68,19 @@ export const initAddCommentListener = (renderComments) => {
         return;
         }
 
+        document.querySelector('.form').style.display = 'block'
+        document.querySelector('.add-form').style.display = 'none'    
+        
         postComment(sanitizeHtml(text.value), sanitizeHtml(name.value)).then(
-            (data) => {
-                updateComments(data)
-                renderComments()
-                name.value = ""
-                text.value = ""
-            },
+          (data) => {
+            document.querySelector('.form').style.display = 'none'
+            document.querySelector('.add-form').style.display = 'flex'
+
+            updateComments(data)
+            renderComments()
+            name.value = ""
+            text.value = ""
+          },
         )
     })
 }
