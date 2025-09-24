@@ -74,18 +74,17 @@
 
   const name = document.getElementById('name-input');
   const text = document.getElementById('text-input');
-  
-  const formatDate = () => {
-      const date = new Date();
-      return date.toLocaleString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }).replace(',', '');
-    };    
 
+  const formatDate = (date) => {
+  return date.toLocaleDateString('ru-RU', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).replace(',', '');
+};
+  
   const sanitizeHtml = (value) => {
     return value.replaceAll('<', '&lt;') .replaceAll('>', '&gt;');  
     };  
@@ -93,14 +92,14 @@
   let comments = [      
       {
         name: "Глеб Фокин",
-        date: "12.02.22 12:18",
+        date: new Date("2022-02-12T12:18:00"), 
         text: "Это будет первый комментарий на этой странице",
         likes: 3,
         isLiked: false,
       },
       {
         name: "Варвара Н.",
-        date: "13.02.22 19:22",
+        date: new Date("2022-02-13T19:22:00"),
         text: "Мне нравится как оформлена эта страница! ❤",
         likes: 75,
         isLiked: true,
@@ -116,7 +115,7 @@
         <li class='comment' data-index="${index}">
           <div class='comment-header'>
             <div>${comment.name}</div>
-            <div>${comment.date}</div>
+            <div>${formatDate(comment.date)}</div>
           </div>
           <div class='comment-body'>
             <div class='comment-text'>${comment.text}</div>
@@ -173,7 +172,7 @@
 
     const newComment = {
       name: sanitizeHtml(name.value),
-      date: formatDate(),
+      date: new Date(),
       text: sanitizeHtml(text.value),
       likes: 0,
       isLiked: false,
