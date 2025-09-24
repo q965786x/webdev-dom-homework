@@ -67,21 +67,46 @@ export const initAddCommentListener = (renderComments) => {
         alert('Необходимо заполнить все поля');
         return;
         }
-
+        
         document.querySelector('.form').style.display = 'block'
         document.querySelector('.add-form').style.display = 'none'    
         
-        postComment(sanitizeHtml(text.value), sanitizeHtml(name.value)).then(
-          (data) => {
-            document.querySelector('.form').style.display = 'none'
-            document.querySelector('.add-form').style.display = 'flex'
-
+        postComment(sanitizeHtml(text.value), sanitizeHtml(name.value))
+        .then((data) => {            
             updateComments(data)
             renderComments()
             name.value = ""
             text.value = ""
-          },
-        )
+        })
+        .catch((error) => {
+          
+          if (error.message === "Failed to fetch") {
+            alert ("Нет интернета. Попробуйте снова")
+          }
+
+          if (error.message === "Сервер упал") {
+            alert (error.message)
+          }
+         
+          if (error.message === "Вы допустили ошибку") {
+            alert ('Имя и комментарий должны состоять минимум из 3-х символов')
+          }
+
+          name.classList.add('-error')
+          text.classList.add('-error')
+
+          setTimeout(() => {
+            name.classList.remove('-error')
+            text.classList.remove('-error')
+          }, 2000)
+                
+        })
+        .finally(() => {
+          document.querySelector('.form').style.display = 'none'
+          document.querySelector('.add-form').style.display = 'flex'
+        })
     })
 }
+
+      
   
