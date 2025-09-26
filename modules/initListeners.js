@@ -67,7 +67,7 @@ export const initAddCommentListener = (renderComments) => {
             return
         }
 
-        document.querySelector('.form').style.display = 'block'
+        document.querySelector('.loading-form').style.display = 'block'
         document.querySelector('.add-form').style.display = 'none'
 
         postComment(sanitizeHtml(text.value), sanitizeHtml(name.value))
@@ -101,7 +101,7 @@ export const initAddCommentListener = (renderComments) => {
                 }, 2000)
             })
             .finally(() => {
-                document.querySelector('.form').style.display = 'none'
+                document.querySelector('.loading-form').style.display = 'none'
                 document.querySelector('.add-form').style.display = 'flex'
             })
     })
