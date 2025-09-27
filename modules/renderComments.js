@@ -1,16 +1,20 @@
-import { comments } from "./comments.js"
-import { initReplyListeners, initLikeButtonsListeners } from "./initListeners.js";
+import { comments } from './comments.js'
+import {
+    initReplyListeners,
+    initLikeButtonsListeners,
+} from './initListeners.js'
+import { formatDate } from './addFunctions.js'
 
 export const renderComments = () => {
-    const list = document.querySelector('.comments');
-    
+    const list = document.querySelector('.comments')
+
     list.innerHTML = comments
-    .map((comment, index) => {
-      return `
+        .map((comment, index) => {
+            return `
         <li class='comment' data-index="${index}">
           <div class='comment-header'>
             <div>${comment.name}</div>
-            <div>${comment.date}</div>
+            <div>${formatDate(comment.date)}</div>
           </div>
           <div class='comment-body'>
             <div class='comment-text'>${comment.text}</div>
@@ -22,14 +26,10 @@ export const renderComments = () => {
             </div>
           </div>
         </li>
-      `;
-    }).join('')
+      `
+        })
+        .join('')
 
-    
     initReplyListeners()
     initLikeButtonsListeners(renderComments)
-  }
-
-  
-  
-    
+}
