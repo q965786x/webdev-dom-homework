@@ -4,7 +4,7 @@ import { comments } from './comments.js'
 import { sanitizeHtml } from './addFunctions.js'
 import { delay } from './api.js'
 
-export const initLikeButtonsListeners = () => {
+export const initLikeButtonsListeners = (renderComments) => {
     const likeButtons = document.querySelectorAll('.like-button')
 
     for (const likeButton of likeButtons) {
@@ -30,16 +30,8 @@ export const initLikeButtonsListeners = () => {
                 likeButton.classList.remove('-loading-like')
                 likeButton.disabled = false
 
-                delay()
+                renderComments()
             })
-
-            //comment.likes = comment.isLiked
-            //  ? comment.likes -1
-            //  : comment.likes +1;
-
-            //  comment.isLiked = !comment.isLiked;
-
-            //  renderComments();
         })
     }
 }
