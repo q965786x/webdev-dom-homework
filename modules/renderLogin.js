@@ -1,41 +1,51 @@
-import { fetchComments, updateToken } from "./api.js"
-import { renderRegistration } from "./renderRegistration.js"
+import { fetchAndRenderComments } from '../index.js'
+import { login, updateToken, updateName } from './api.js'
+import { renderRegistration } from './renderRegistration.js'
 
 export const renderLogin = () => {
-    
-    const app = document.getElementById('app')
+    const container = document.querySelector('.container')
 
-    app.innerHTML = `
-        <h1>Страница входа</h1>
-        <div class="form">
-            <h3 class="form-titel">Форма ввода</h3>
-            <div class="form-row">
-                <input type="text" id="login-input" class="input" placeholder="Логин"/>
-                <input type="text" id="password-input" class="input" placeholder="Пароль"/>
-            </div>
-            <br />
-            <button class="button" id="login-button">Войти</button>
-            <button class="button" id="reg-button">Зарегистрироваться</button>
-        </div>
+    const loginHtml = `
+        <section class="add-form">
+            <h1>Форма входа</h1>
+            <input type="text" class="add-form-name" placeholder="Введите логин" id="login" required/>
+            <input type="password" class="add-form-name" placeholder="Введите пароль" id="password" required/>
+            <fieldset class="add-form-registry">
+                <button class="add-form-button-main button-main" type="submit">Войти</button>
+                <ul class="add-form-button-link registry">Зарегистрироваться</ul>
+            </fieldset>
+        </section>
     `
 
-    const button = document.getElementById('login-button')
-    const loginElement = document.getElementById('login-input')
-    const passwordElement = document.getElementById('password-input')
+    container.innerHTML = loginHtml
 
-    button.addEventListener('click', () => {
-        login({
-            login: loginElement.value,
-            password: passwordElement.value,
-        }).then((responseData) => {
-            updateToken(data.user.token)
-            fetchComments()            
-        })
+    document.querySelector('.registry').addEventListener('click', () => {
+        renderRegistration()
     })
 
-    const buttonReg = document.getElementById('reg-button')
+    const loginElement = document.getElementById('login')
+    const passwordElement = document.getElementById('password')
+    const submitButtonElement = document.querySelector('.button-main')
 
-    buttonReg.addEventListener('click', () => {
-        renderRegistration()
+    submitButtonElement.addEventListener('click', () => {
+        login(loginElement.value, passwordElement.value)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Ошибка авторизации')
+                }
+                return response.json()
+            })
+            .then((data) => {
+                if (data.user && data.user.token) {
+                    updateToken(data.user.token)
+                    updateName(data.user.name)
+                    fetchAndRenderComments()
+                } else {
+                    throw new Error('Неверные данные авторизации')
+                }                
+            })
+            .catch((error) => {
+                alert('Ошибка входа: ' + error.message)
+            })
     })
 }

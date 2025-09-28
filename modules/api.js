@@ -1,12 +1,37 @@
 const host = 'https://wedev-api.sky.pro/api/v2/lialia-khabibova'
+const authHost = 'https://wedev-api.sky.pro/api/user'
 
-let token = ""
+//Добавили константы для ключей LocalStorage
+
+const tokenKey = 'userToken'
+const nameKey = 'userName'
+
+export let token = localStorage.getItem(tokenKey) || ''
 
 export const updateToken = (newToken) => {
     token = newToken
+    if (newToken) {
+        localStorage.setItem(tokenKey, newToken)
+    } else {
+        localStorage.removeItem(tokenKey)
+    }
 }
 
-const authToken = 'https://wedev-api.sky.pro/api/user'
+export let name = localStorage.getItem(nameKey) || ''
+
+export const updateName = (newName) => {
+    name = newName
+    if (newName) {
+        localStorage.setItem(nameKey, newName)
+    } else {
+        localStorage.removeItem(nameKey)
+    }
+}
+
+export const logout = () => {
+    updateToken('')
+    updateName('')
+}
 
 export const fetchComments = () => {
     return fetch(host + '/comments', {
@@ -30,47 +55,6 @@ export const fetchComments = () => {
 
             return appComments
         })
-}
-
-/*export const postComment = (text, name) => {
-    return fetch(host + '/comments', {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-            text,
-            name,
-            //forceError: true
-        }),
-    })
-        .then((response) => {
-          if (response.status === 201) {
-            return response.json()
-          } else {
-            if (response.status === 500) {
-              throw new Error('Сервер упал')
-            }
-            if (response.status === 400) {
-              throw new Error('Вы допустили ошибку')
-            }
-
-              throw new Error('Что-то пошло не так')
-          }
-    })
-        .then(() => {
-        return fetchComments()
-        })  
-}*/
-
-// Код функции отсрочки выполнения действия
-
-export function delay(interval = 300) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve()
-        }, interval)
-    })
 }
 
 //Код с автоматическими повторными попытками при ошибках 500
@@ -101,7 +85,7 @@ export const postComment = async (text, name) => {
                 await newDelay(retriesDelay * Math.pow(2, attempt))
                 continue
             } else if (response.status === 400) {
-                throw new Error('Вы допустили ошибку')                
+                throw new Error('Вы допустили ошибку')
             } else if (response.status === 401) {
                 throw new Error('Нет авторизации')
             } else {
@@ -116,27 +100,33 @@ export const postComment = async (text, name) => {
     }
 }
 
-export function login({ login, password }) {
-    return fetch(`${authToken}/login`, {
-        method: 'POST',
-        body: JSON.stringify({
-            login,
-            password,            
-        }),
-    }).then((response) => {
-        return response.json()
-    })  
+// Код функции отсрочки выполнения действия
+
+export function delay(interval = 300) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve()
+        }, interval)
+    })
 }
 
-export function registration({ login, name, password }) {
-    return fetch(authToken, {
+export const login = (login, password) => {
+    return fetch(authHost + '/login', {
         method: 'POST',
         body: JSON.stringify({
-            login,
-            password, 
-            name,           
+            login: login,
+            password: password,
         }),
-    }).then((response) => {
-        return response.json()
-    })  
+    })
+}
+
+export const registration = (name, login, password) => {
+    return fetch(authHost, {
+        method: 'POST',
+        body: JSON.stringify({
+            name: name,
+            login: login,
+            password: password,
+        }),
+    })
 }
