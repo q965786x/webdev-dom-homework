@@ -15,10 +15,7 @@ export const fetchAndRenderComments = (isFirstLoading) => {
         renderComments()
     })
 }
-if (token) {
-    fetchAndRenderComments(true)
-} else {
-    renderLogin()
-}
+
+fetchAndRenderComments(true)
 
 
