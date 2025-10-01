@@ -1,8 +1,6 @@
 import { fetchComments } from './modules/api.js'
 import { updateComments } from './modules/comments.js'
 import { renderComments } from './modules/renderComments.js'
-import { renderLogin } from './modules/renderLogin.js'
-import { token } from './modules/api.js'
 
 export const fetchAndRenderComments = (isFirstLoading) => {
     if (isFirstLoading) {
@@ -17,5 +15,3 @@ export const fetchAndRenderComments = (isFirstLoading) => {
 }
 
 fetchAndRenderComments(true)
-
-
