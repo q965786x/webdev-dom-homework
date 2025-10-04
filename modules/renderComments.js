@@ -1,14 +1,10 @@
-import { comments } from './comments.js'
-import {
-    initReplyListeners,
-    initLikeButtonsListeners,
-    initAddCommentListener,
-} from './initListeners.js'
-import { formatDate } from './addFunctions.js'
-import { logout, name, token } from './api.js'
-import { renderLogin } from './renderLogin.js'
-import { fetchAndRenderComments } from '../index.js'
-import { renderRegistration } from './renderRegistration.js'
+import { comments } from './comments'
+import { initReplyListeners, initLikeButtonsListeners, initAddCommentListener} from './initListeners'
+import { formatDate } from './addFunctions'
+import { logout, name, token } from './api'
+import { renderLogin } from './renderLogin'
+import { fetchAndRenderComments } from '../index'
+import { renderRegistration } from './renderRegistration'
 
 export const renderComments = () => {
     const container = document.querySelector('.container')

@@ -1,6 +1,6 @@
-import { fetchComments } from './modules/api.js'
-import { updateComments } from './modules/comments.js'
-import { renderComments } from './modules/renderComments.js'
+import { fetchComments } from './modules/api'
+import { updateComments } from './modules/comments'
+import { renderComments } from './modules/renderComments'
 
 export const fetchAndRenderComments = (isFirstLoading) => {
     if (isFirstLoading) {

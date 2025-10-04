@@ -1,8 +1,8 @@
-import { postComment } from './api.js'
-import { updateComments } from './comments.js'
-import { comments } from './comments.js'
-import { sanitizeHtml } from './addFunctions.js'
-import { delay } from './api.js'
+import { postComment } from './api'
+import { updateComments } from './comments'
+import { comments } from './comments'
+import { sanitizeHtml } from './addFunctions'
+import { delay } from './api'
 
 export const initLikeButtonsListeners = (renderComments) => {
     const likeButtons = document.querySelectorAll('.like-button')
